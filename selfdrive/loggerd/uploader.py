@@ -18,7 +18,7 @@ from common import android
 from common.params import Params
 from common.api import Api
 
-fake_upload = os.getenv("FAKEUPLOAD") is not None
+fake_upload = True
 
 def raise_on_thread(t, exctype):
   for ctid, tobj in threading._active.items():
@@ -77,6 +77,8 @@ def is_on_wifi():
     return False
 
 def is_on_hotspot():
+  return True
+
   try:
     result = subprocess.check_output(["ifconfig", "wlan0"], stderr=subprocess.STDOUT, encoding='utf8')
     result = re.findall(r"inet addr:((\d+\.){3}\d+)", result)[0][0]

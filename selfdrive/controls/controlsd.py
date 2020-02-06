@@ -77,7 +77,7 @@ def data_sample(CI, CC, sm, can_sock, state, mismatch_counter, can_error_counter
   sm.update(0)
 
   events = list(CS.events)
-  events += list(sm['dMonitoringState'].events)
+  # events += list(sm['dMonitoringState'].events)
   add_lane_change_event(events, sm['pathPlan'])
   enabled = isEnabled(state)
 
@@ -518,6 +518,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   rk = Ratekeeper(100, print_delay_threshold=None)
 
   internet_needed = params.get("Offroad_ConnectivityNeeded", encoding='utf8') is not None
+  internet_needed = False
 
   prof = Profiler(False)  # off by default
 
@@ -534,14 +535,14 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
       events.append(create_event('radarCommIssue', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     elif not sm.all_alive_and_valid():
       events.append(create_event('commIssue', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
-    if not sm['pathPlan'].mpcSolutionValid:
-      events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
+    # if not sm['pathPlan'].mpcSolutionValid:
+    #   events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
     if not sm['pathPlan'].sensorValid:
       events.append(create_event('sensorDataInvalid', [ET.NO_ENTRY, ET.PERMANENT]))
     if not sm['pathPlan'].paramsValid:
       events.append(create_event('vehicleModelInvalid', [ET.WARNING]))
-    if not sm['pathPlan'].posenetValid:
-      events.append(create_event('posenetInvalid', [ET.NO_ENTRY, ET.WARNING]))
+    # if not sm['pathPlan'].posenetValid:
+    #   events.append(create_event('posenetInvalid', [ET.NO_ENTRY, ET.WARNING]))
     if not sm['plan'].radarValid:
       events.append(create_event('radarFault', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if sm['plan'].radarCanError:
