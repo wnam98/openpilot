@@ -135,9 +135,9 @@ class Planner():
       accel = list(sm['model'].longitudinal.accelerations)[0]
 
 
-      desired_speed = speed + np.clip(distance/3.0, -speed*.1 - .5, speed*.1 + .5)
+      desired_speed = speed + np.clip(distance/2.0, -speed*.1 - .5, speed*.1 + .5)
       speed_change = desired_speed - v_ego
-      desired_accel = np.clip(speed_change/5.0 + accel, -ACCEL_LIMIT, ACCEL_LIMIT)
+      desired_accel = np.clip(speed_change/2.0 + accel, -ACCEL_LIMIT, ACCEL_LIMIT)
 
       self.a_model = desired_accel
       self.v_model = desired_speed
