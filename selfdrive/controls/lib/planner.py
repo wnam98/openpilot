@@ -132,7 +132,7 @@ class Planner():
     if len(sm['model'].longitudinal.speeds):
       distance = list(sm['model'].longitudinal.distances)[0]
       speed = list(sm['model'].longitudinal.speeds)[0]
-      accel = list(sm['model'].longitudinal.accelerations)[2]
+      accel = min(list(sm['model'].longitudinal.accelerations)[:2])
 
 
       desired_speed = speed + np.clip(distance/2.0, -speed*.1 - .5, speed*.1 + .5)
