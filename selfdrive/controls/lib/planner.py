@@ -130,9 +130,9 @@ class Planner():
     following = lead_1.status and lead_1.dRel < 45.0 and lead_1.vLeadK > v_ego and lead_1.aLeadK > 0.0
 
     if len(sm['model'].longitudinal.speeds):
-      distance = list(sm['model'].longitudinal.distances)[0]
-      speed = list(sm['model'].longitudinal.speeds)[0]
-      accel = list(sm['model'].longitudinal.accelerations)[0]
+      distance = list(sm['model'].longitudinal.distances)[1]
+      speed = list(sm['model'].longitudinal.speeds)[1]
+      accel = list(sm['model'].longitudinal.accelerations)[1]
 
 
       desired_speed = speed + np.clip(distance/2.0, -speed*.1 - .5, speed*.1 + .5)
