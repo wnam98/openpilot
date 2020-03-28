@@ -443,6 +443,10 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
   passive = passive or not openpilot_enabled_toggle
 
+  # Passive if internet needed
+  internet_needed = params.get("Offroad_ConnectivityNeeded", encoding='utf8') is not None
+  passive = passive or internet_needed
+
   # Pub/Sub Sockets
   if pm is None:
     pm = messaging.PubMaster(['sendcan', 'controlsState', 'carState', 'carControl', 'carEvents', 'carParams'])
@@ -517,7 +521,6 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   # controlsd is driven by can recv, expected at 100Hz
   rk = Ratekeeper(100, print_delay_threshold=None)
 
-  internet_needed = params.get("Offroad_ConnectivityNeeded", encoding='utf8') is not None
 
   prof = Profiler(False)  # off by default
 
@@ -536,7 +539,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
       events.append(create_event('commIssue', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if not sm['pathPlan'].mpcSolutionValid:
       events.append(create_event('plannerError', [ET.NO_ENTRY, ET.IMMEDIATE_DISABLE]))
-    if not sm['pathPlan'].sensorValid:
+    if not sm['pathPlan'].sensorValid and os.getenv("NOSENSOR") is None:
       events.append(create_event('sensorDataInvalid', [ET.NO_ENTRY, ET.PERMANENT]))
     if not sm['pathPlan'].paramsValid:
       events.append(create_event('vehicleModelInvalid', [ET.WARNING]))
